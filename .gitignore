@@ -1,0 +1,33 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# project
+models/
+outputs/
+*.mp4
+miopen-cache/
+*.log
+inputs/
+
+# Local environment and agent settings
+.env
+.env.*
+!.env.example
+.codex/
+.agents/
+
+# Private keys and local credentials
+*.pem
+*.key
+id_rsa
+id_ed25519
+credentials.json
+secrets.json

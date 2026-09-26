@@ -1,0 +1,52 @@
+[project]
+name = "ltx25-cli"
+version = "0.1.0"
+description = "Command-line runner for LTX-2.5 video generation on AMD ROCm (gfx1151)"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "diffusers",
+    "transformers",
+    "accelerate",
+    "safetensors",
+    "sentencepiece",
+    "huggingface-hub[cli]",
+    "click",
+    "pyyaml",
+    "pillow",
+    "imageio[ffmpeg]",
+    "av",
+    "psutil>=7.2.2",
+]
+
+[project.scripts]
+ltx25 = "ltx25_cli.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.2,<0.12.0"]
+build-backend = "uv_build"
+
+# --- ROCm wheels -------------------------------------------------------------
+# torch MUST come from the gfx1151-specific index. The generic `whl-multi-arch`
+# index fails at runtime on this GPU with hipErrorInvalidImage /
+# "kpack_load_code_object failed with error: 13" in the development environment.
+[[tool.uv.index]]
+name = "rocm-gfx1151"
+url = "https://repo.amd.com/rocm/whl/gfx1151/"
+
+[tool.uv]
+# torch's wheels here depend on `rocm[libraries]` / `rocm-sdk-*-gfx1151`, which
+# live on the same index and are only published as pre-releases. Both settings
+# are required for the resolve to succeed (same recipe as the whisperX venv).
+index-strategy = "unsafe-best-match"
+prerelease = "allow"
+
+[tool.uv.sources]
+torch = { index = "rocm-gfx1151" }
+torchvision = { index = "rocm-gfx1151" }
+torchaudio = { index = "rocm-gfx1151" }
+# LTX-2.5 is only supported on diffusers main; not in any tagged release yet.
+diffusers = { git = "https://github.com/huggingface/diffusers" }
