@@ -1,5 +1,10 @@
 # LTX-25-cli
 
+## ライセンス
+
+本プロジェクトのコードは [Apache License 2.0](LICENSE) で公開しています。
+使用する外部ライブラリ・モデル・重みには、それぞれのライセンス・利用条件が適用されます。
+
 LTX-2.5 の動画・音声生成を、ComfyUI を使わず Python スクリプトから実行する実験用プロジェクトです。diffusers の `LTX2Pipeline` を使用し、AMD ROCm / gfx1151（Radeon 8060S）環境を対象にしています。
 
 ## 現在の状況
