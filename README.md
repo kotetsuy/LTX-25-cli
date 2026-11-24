@@ -30,7 +30,7 @@ LTX-2.5 の動画・音声生成を、ComfyUI を使わず Python スクリプ�
 | OS | Ubuntu 26.04 |
 | Python | 3.12（`>=3.12,<3.13`） |
 | パッケージ管理 | uv、`uv.lock` 同梱 |
-| PyTorch | AMD の gfx1151 専用 wheel を使用 |
+| PyTorch | AMD の ROCm 10.2 wheel、gfx1151 向け依存関係を使用 |
 | diffusers | Git リポジトリから取得（解決済みリビジョンは `uv.lock`） |
 
 モデルの保存には約 67 GiB に加え、Python 環境・ダウンロードキャッシュ・生成物用の空き容量が必要です。この容量はダウンロードスクリプトと開発記録に基づく目安です。
@@ -45,7 +45,7 @@ uv sync --locked
 uv run python scripts/check_env.py
 ```
 
-`pyproject.toml` は torch / torchvision / torchaudio を `https://repo.amd.com/rocm/whl/gfx1151/` から取得する設定です。開発記録では汎用 wheel で `hipErrorInvalidImage` が発生しています。ネイティブ gfx1151 ビルドを使用するため、`HSA_OVERRIDE_GFX_VERSION` は設定しません。
+`pyproject.toml` は AMD の ROCm 10.2 wheel インデックスから PyTorch 2.15.0、torchvision 0.29.2、torchaudio 2.11.1 を取得し、gfx1151 向けのランタイムを選択します。`HSA_OVERRIDE_GFX_VERSION` は設定しません。ROCm 10.2 では 320×192・17フレームの動画生成と音声付き MP4 の再生を確認しました。従来の生成の計測結果は、それぞれの記録に記載した旧環境の結果です。
 
 `check_env.py` は GPU の認識、bf16 行列演算、必要な diffusers クラスの存在を確認します。ROCm 環境でも PyTorch の API 名は `torch.cuda` です。
 
